@@ -3,7 +3,7 @@ package sorting_algorithms;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class HybridSort {
-	public static int s = 4; // Threshold should be in logn(?)
+	public static int s = 8; // Threshold should be in logn(?)
 	public static int comp;
 
 	private static void hybridSort(int[] arr, int left, int right) {
@@ -56,17 +56,22 @@ public class HybridSort {
 		}
 	}
 	
-	public static void insertionSort(int arr[], int left, int right) {
-	    for (int i = left; i < right; i++) {
-	        int tempVal = arr[i + 1];
-	        int j = i + 1;
-	        while (j > left && arr[j - 1] > tempVal) {
-	        	comp++;
-	            arr[j] = arr[j - 1];
-	            j--;
-	        }
-	        arr[j] = tempVal;
-	    }
+	private static void insertionSort(int[] ar, int left, int right) {
+		if (ar == null) {
+			return;
+		}
+		for (int i = left; i < right; i++) {
+			for (int j = i + 1; j > left && ar[j] < ar[j - 1]; j--) {
+				comp++;
+				swap(ar, j - 1, j);
+			}
+		}
+	}
+
+	private static void swap(int[] ar, int i, int j) {
+		int tmp = ar[i];
+		ar[i] = ar[j];
+		ar[j] = tmp;
 	}
 	
 	
