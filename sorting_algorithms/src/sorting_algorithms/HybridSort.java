@@ -1,9 +1,10 @@
 package sorting_algorithms;
 
+import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class HybridSort {
-	public static int s = 8; // Threshold should be in logn(?)
+	public static int s = 10; // Threshold should be in logn(?)
 	public static int comp;
 
 	private static void hybridSort(int[] arr, int left, int right) {
@@ -16,44 +17,70 @@ public class HybridSort {
 	        merge(arr, left, right);
 	    }
 	}
-
-	static void merge(int arr[],int n, int m) {
-		if(m-n<=0) return;
+	
+	static void mergesort(int arr[], int n, int m) {
 		
 		int mid = (n+m)/2;
-		int i=n;//1st element of 1st half
-		int j=mid+1;//1st element of 2nd half
+		if(m-n<=0) return;
 		
-		//while both halves are not empty
-		while(i<=mid && j<=m) {
-			comp++;
-			//compare 1st element of both halves
-			if(arr[i]<arr[j]) {
-				i++; //no shifting done as element in correct position
-			}
-			else if(arr[i]>arr[j]) {
-				int temp = arr[j]; //1st element of 2nd half into temp
-				//shift all elements towards 'j' position
-				for(int x=j;x>i;x--) {
-					arr[x] = arr[x-1];
-				}
-				arr[i] = temp;//1st element of 2nd half joins end of merged list
-				//Increment all position by one
-				j++;
-				i++;
-				mid++;
-			}
-			else { //if 1st elements of 2 halves are equal
-				if(i==mid && j==m) break; //if last element
-				for(int x=j;x>i;x--) { ////shift all elements towards 'j' position
-					arr[x] = arr[x-1];
-				}
-				arr[i+1] = arr[i]; //Copy element into position behind end of merged list
-				i+=2;
-				j++;
-				mid++;
-			}
+		//Split the array into half recursively 
+		else if(m-n>1) { //if 2 elements left
+			mergesort(arr,n,mid);
+			mergesort(arr,mid+1,m);
 		}
+		merge(arr,n,m);
+	}
+
+	//Merge with auxiliary storage
+	static void merge(int arr[], int n, int m) {
+		
+		int mid = (n+m)/2;
+		
+		int h1 = mid - n + 1;
+        int h2 = m - mid;
+ 
+        //Split array into 2 halves
+        int L[] = new int[h1];
+        int R[] = new int[h2];
+ 
+        //Copy elements into each halves respectively
+        for (int i = 0; i < h1; ++i)
+            L[i] = arr[n + i];
+        for (int j = 0; j < h2; ++j)
+            R[j] = arr[mid + 1 + j];
+ 
+        // Initial indexes of first and second halves
+        int i = 0, j = 0;
+ 
+        // Initial index of merged list
+        int k = n;
+        while (i < h1 && j < h2) {
+        	comp++;
+            if (L[i] <= R[j]) {
+                arr[k] = L[i];
+                i++;
+            }
+            else {
+                arr[k] = R[j];
+                j++;
+            }
+            k++;
+        }
+ 
+        // Copy remaining elements of L[] into merged list
+        while (i < h1) {
+            arr[k] = L[i];
+            i++;
+            k++;
+        }
+ 
+        // Copy remaining elements of R[] into merged list
+        while (j < h2) {
+            arr[k] = R[j];
+            j++;
+            k++;
+        }
+		
 	}
 	
 	private static void insertionSort(int[] ar, int left, int right) {
@@ -96,19 +123,42 @@ public class HybridSort {
 	}
 
 	public static void main(String args[]) {
-		int arrSize = 100;
+		int arrSize = 10000;
 		int arr[] = new int[arrSize];
 		arr = randomArray(arrSize); // Generate random array
-
+		int arr2[] = new int[arrSize];
+		arr2 = arr.clone();
+		
+		//Start of hybridsort
 		System.out.println("Given Array");
-		printArray(arr);
-
+		//printArray(arr);
+		
+		double startTime = System.nanoTime();
 		hybridSort(arr, 0, arr.length - 1);
+		double stopTime = System.nanoTime();
+		
+		System.out.println("\nSorted array of HybridSort");
+		//printArray(arr);
+		
+		System.out.println("\nNumber of Comparisons for HybridSort: " + comp);
+		System.out.println("\nComputational time: "+ (stopTime - startTime)/1000000+"ms");
+		//End of hybrid sort
+		
+		
+		//Start of mergesort
+		comp = 0;
+		double startTime2 = System.nanoTime();
+		mergesort(arr2, 0, arr.length-1);
+		double stopTime2 = System.nanoTime();
+		//System.out.println("\nSorted array of MergeSort");
+		//printArray(arr3);
 
-		System.out.println("\nSorted array");
-		printArray(arr);
-
-		System.out.println("\nNumber of Comparisons: " + comp);
+		System.out.println("\nNumber of Comparisons for MergeSort: " + comp);
+		System.out.println("\nComputational time: "+ (stopTime2 - startTime2)/1000000+"ms");
+		//End of mergesort
+		
+		//Check if both sorted arrays are equal
+		System.out.println("\nIs array equal: "+Arrays.equals(arr, arr2));
 	}
 
 }
