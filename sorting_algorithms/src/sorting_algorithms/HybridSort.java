@@ -20,7 +20,7 @@ public class HybridSort {
 	
 	static void mergesort(int arr[], int n, int m) {
 		
-		int mid = (n+m)/2;
+		int mid = n+(m-n)/2;
 		if(m-n<=0) return;
 		
 		//Split the array into half recursively 
@@ -34,7 +34,9 @@ public class HybridSort {
 	//Merge with auxiliary storage
 	static void merge(int arr[], int n, int m) {
 		
-		int mid = (n+m)/2;
+		if(arr==null) return;
+		
+		int mid = n+(m-n)/2;
 		
 		int h1 = mid - n + 1;
         int h2 = m - mid;
@@ -123,42 +125,49 @@ public class HybridSort {
 	}
 
 	public static void main(String args[]) {
-		int arrSize = 10000;
-		int arr[] = new int[arrSize];
-		arr = randomArray(arrSize); // Generate random array
-		int arr2[] = new int[arrSize];
-		arr2 = arr.clone();
-		
-		
-		System.out.println("Given Array");
-		//printArray(arr);
+		int arrSize = 1000;
+		double avgTime =0;
+		long avgComp = 0;
 		
 		//Start of hybridsort
-		double startTime = System.nanoTime();
-		hybridSort(arr, 0, arr.length - 1);
-		double stopTime = System.nanoTime();
+		for(int x=0;x<1000;x++) {
+			comp = 0;
+			int arr[] = new int[arrSize];
+			arr = randomArray(arrSize); // Generate random array
+			
+			
+			//System.out.println("Given Array");
+			//printArray(arr);
+			
+			//Start of hybridsort
+			double startTime = System.nanoTime();
+			hybridSort(arr, 0, arr.length - 1);
+			double stopTime = System.nanoTime();
+			avgTime+=(stopTime-startTime)/1000000;
+			avgComp+=comp;
+		}
+		//End of hybridsort
 		
-		System.out.println("\nSorted array of HybridSort");
-		//printArray(arr);
-		
-		System.out.println("\nNumber of Comparisons for HybridSort: " + comp);
-		System.out.println("\nComputational time: "+ (stopTime - startTime)/1000000+"ms");
-		//End of hybrid sort
-		
+		System.out.println("Average computational time of Hybrid Sort: " + avgTime/1000);
+		System.out.println("Average comparisons of Hybrid Sort: " + avgComp/1000);
 		
 		//Start of mergesort
-		comp = 0;
-		double startTime2 = System.nanoTime();
-		mergesort(arr2, 0, arr2.length-1);
-		double stopTime2 = System.nanoTime();
-		//System.out.println("\nSorted array of MergeSort");
-
-		System.out.println("\nNumber of Comparisons for MergeSort: " + comp);
-		System.out.println("\nComputational time: "+ (stopTime2 - startTime2)/1000000+"ms");
+		avgComp = 0;
+		avgTime =0;
+		for(int x=0;x<1000;x++) {
+			comp = 0;
+			int arr[] = new int[arrSize];
+			arr = randomArray(arrSize); // Generate random array
+			double startTime2 = System.nanoTime();
+			mergesort(arr, 0, arr.length-1);
+			double stopTime2 = System.nanoTime();
+			avgTime+=(stopTime2-startTime2)/1000000;
+			avgComp+=comp;
+		}
 		//End of mergesort
+		System.out.println("\nAverage computational time of Merge Sort: "+avgTime/1000);
+		System.out.println("Average comparisons of Merge Sort: " + avgComp/1000);
 		
-		//Check if both sorted arrays are equal
-		System.out.println("\nIs array equal: "+Arrays.equals(arr, arr2));
 	}
 
 }
