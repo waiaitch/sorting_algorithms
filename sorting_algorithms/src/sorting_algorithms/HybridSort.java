@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class HybridSort {
-	public static int s = 10; // Threshold should be in logn(?)
+	public static int s = 6; // Threshold should be in logn(?)
 	public static int comp;
 
 	private static void hybridSort(int[] arr, int left, int right) {
@@ -129,10 +129,11 @@ public class HybridSort {
 		int arr2[] = new int[arrSize];
 		arr2 = arr.clone();
 		
-		//Start of hybridsort
+		
 		System.out.println("Given Array");
 		//printArray(arr);
 		
+		//Start of hybridsort
 		double startTime = System.nanoTime();
 		hybridSort(arr, 0, arr.length - 1);
 		double stopTime = System.nanoTime();
@@ -148,10 +149,9 @@ public class HybridSort {
 		//Start of mergesort
 		comp = 0;
 		double startTime2 = System.nanoTime();
-		mergesort(arr2, 0, arr.length-1);
+		mergesort(arr2, 0, arr2.length-1);
 		double stopTime2 = System.nanoTime();
 		//System.out.println("\nSorted array of MergeSort");
-		//printArray(arr3);
 
 		System.out.println("\nNumber of Comparisons for MergeSort: " + comp);
 		System.out.println("\nComputational time: "+ (stopTime2 - startTime2)/1000000+"ms");
