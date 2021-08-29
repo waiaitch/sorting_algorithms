@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class HybridSort {
-	public static int s = 10; // Threshold
+	public static int s = 4; // Threshold
 	public static int comp;
-	public static int sample = 10000	; //Sample size
+	public static int sample = 1	; //Sample size
 
 	private static void hybridSort(int[] arr, int left, int right) {
 	    if (right - left <= s) {
@@ -181,12 +181,52 @@ public class HybridSort {
 	}
 
 	public static void main(String args[]) {
-		int arrSize = 10000;
+		int arrSize = 100;
 		double avgTime =0;
 		long avgComp = 0;
 		double avgTime2 = 0;
 		long avgComp2 = 0;
 		
+		/*
+		//For testing sorted array
+		for(int x=0;x<sample;x++) {
+			comp = 0;
+			int arr[] = new int[arrSize];
+			for(int z=0;z<arrSize;z++) {
+				arr[z] = z;
+			}
+			int arr2[] = arr.clone();
+			
+			//Start of hybridsort
+			double startTime = System.nanoTime();
+			hybridSort(arr, 0, arr.length - 1);
+			double stopTime = System.nanoTime();
+			avgTime+=(stopTime-startTime)/1000000;
+			avgComp+=comp;
+			//End of hybridsort
+			//Start of merge sort
+			comp = 0;
+			double startTime2 = System.nanoTime();
+			mergeSort(arr2, 0, arr2.length-1);
+			double stopTime2 = System.nanoTime();
+			avgTime2+=(stopTime2-startTime2)/1000000;
+			avgComp2+=comp;
+			//System.out.println(isSorted(arr));
+			//End of merge sort
+		}
+		
+		
+		System.out.println("Average computational time of Hybrid Sort: " + avgTime/sample + "ms");
+		System.out.println("Average comparisons of Hybrid Sort: " + avgComp/sample);
+
+		System.out.println("\nAverage computational time of Merge Sort: "+avgTime2/sample + "ms");
+		System.out.println("Average comparisons of Merge Sort: " + avgComp2/sample);
+		int diff = (int) (((avgTime2/1000)/(avgTime/1000))*100);
+		System.out.println("\nDifference in Computational time of Hybrid vs Merge: " + diff +"%");
+		System.out.println("Difference in Comparisons: " + (avgComp2/sample-avgComp/sample));
+		
+		
+		*/
 		
 		//Start of hybridsort
 		for(int x=0;x<sample;x++) {
@@ -209,6 +249,7 @@ public class HybridSort {
 			double stopTime2 = System.nanoTime();
 			avgTime2+=(stopTime2-startTime2)/1000000;
 			avgComp2+=comp;
+			//System.out.println(isSorted(arr));
 			//End of merge sort
 		}
 		
